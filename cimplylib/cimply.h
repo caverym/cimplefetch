@@ -5,11 +5,8 @@
 #ifndef CIMPLEFETCH_CIMPLY_H
 #define CIMPLEFETCH_CIMPLY_H
 #include <stdlib.h>
-#include <pwd.h>
-#include <unistd.h>
-#include <stdlib.h>
 
-struct cUser
+struct cimply
 {
     const char *name;
     const char *home;
@@ -22,11 +19,10 @@ struct cUser
 
 };
 
-int cinit(struct cUser *cstruct)
+int cinit(struct cimply *cstruct)
 {
 	cstruct->name = getenv("USER");
 	cstruct->home = getenv("HOME");
-	//cstruct->shell = getpwuid(geteuid())->pw_shell;
 	cstruct->shell = getenv("SHELL");
 	cstruct->pwd = getenv("PWD");
 	cstruct->desktop = getenv("XDG_SESSION_DESKTOP");

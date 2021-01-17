@@ -4,7 +4,7 @@
 #include "cimplylib/cimply.h"
 
 struct utsname uname_info;
-struct cUser user_info;
+struct cimply user_info;
 struct sysinfo system_info;
 
 int print_uptime(int secondes)
