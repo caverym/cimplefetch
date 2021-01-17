@@ -10,22 +10,17 @@ struct cimply {
 	const char *name;
 	const char *home;
 	const char *shell;
-	const char *session;
-	const char *session_type;
 	const char *desktop;
 	const char *pwd;
-
-
 };
 
-int cinit(struct cimply *cstruct)
+int cimple(struct cimply *cstruct)
 {
 	cstruct->name = getenv("USER");
 	cstruct->home = getenv("HOME");
 	cstruct->shell = getenv("SHELL");
 	cstruct->pwd = getenv("PWD");
 	cstruct->desktop = getenv("XDG_SESSION_DESKTOP");
-	cstruct->session_type = getenv("XDG_SESSION_TYPE");
 
 	return 0;
 }

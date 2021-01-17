@@ -1,7 +1,7 @@
 PROG=cimplefetch
 
 build:
-	gcc -o $(PROG) main.c
+	gcc -o $(PROG) $(PROG).c
 
 install:
 	install -D -m 755 $(PROG) /usr/bin/$(PROG)
