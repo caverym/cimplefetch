@@ -32,7 +32,7 @@ int print_os()
 	return printf("OS:      %s\n", uname_info.sysname);
 }
 
-int print_machine()
+int print_arch()
 {
 	return printf("Machine: %s\n", uname_info.machine);
 }
@@ -72,7 +72,7 @@ int print_all()
 	print_userinfo();
 	print_os();
 	print_kernel();
-	print_machine();
+	print_arch();
 	print_uptime(system_info.uptime);
 
 	print_shell();
@@ -90,6 +90,9 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 		case 'a':
 			print_all();
 			break;
+		case 'A':
+			print_arch();
+			break;
 		case 'd':
 			print_desktop();
 			break;
@@ -98,9 +101,6 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 			break;
 		case 'k':
 			print_kernel();
-			break;
-		case 'm':
-			print_machine();
 			break;
 		case 'o':
 			print_os();
@@ -142,10 +142,10 @@ int main(int argc, char *argv[])
 	struct argp_option options[] =
 		{
 			{"all", 'a', 0, 0, "Print all"},
+			{"arch", 'A', 0, 0, "View machine"},
 			{"desktop", 'd', 0, 0, "View current user desktop environment"},
 			{"home", 'H', 0, 0, "View current user home"},
 			{"kernel", 'k', 0 ,0, "View kernel info"},
-			{"machine", 'm', 0, 0, "View machine"},
 			{"os", 'o', 0, 0, "View OS info"},
 			{"shell", 's', 0, 0, "View current user shell"},
 			{"uptime", 't', 0, 0, "View system uptime"},
