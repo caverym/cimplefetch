@@ -6,15 +6,14 @@
 #define CIMPLEFETCH_CIMPLY_H
 #include <stdlib.h>
 
-struct cimply
-{
-    const char *name;
-    const char *home;
-    const char *shell;
-    const char *session;
-    const char *session_type;
-    const char *desktop;
-    const char *pwd;
+struct cimply {
+	const char *name;
+	const char *home;
+	const char *shell;
+	const char *session;
+	const char *session_type;
+	const char *desktop;
+	const char *pwd;
 
 
 };
@@ -31,4 +30,4 @@ int cinit(struct cimply *cstruct)
 	return 0;
 }
 
-#endif //CIMPLEFETCH_CIMPLY_H
+#endif				//CIMPLEFETCH_CIMPLY_H

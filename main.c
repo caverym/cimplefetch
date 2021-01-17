@@ -11,8 +11,8 @@ int print_uptime(int secondes)
 {
 	int heures, minutes;
 
-	heures = (secondes/3600);
-	minutes = (secondes -(3600*heures))/60;
+	heures = (secondes / 3600);
+	minutes = (secondes - (3600 * heures)) / 60;
 	// secondes = (secondes -(3600*heures)-(minutes*60));
 
 	printf("Uptime: %dH %dM\n", heures, minutes);
