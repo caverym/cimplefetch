@@ -4,9 +4,6 @@ A simple program to fetch system information written in C.
 
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/caverym/cimplefetch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/caverym/cimplefetch/context:cpp)
 
-
-## cloning
-=======
 ## Cloning:
 clone recursively
 ```
