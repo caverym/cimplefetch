@@ -75,9 +75,10 @@ int print_shell()
 
 int print_home()
 {
-	if (user_info.home == NULL)
+	char *home = getenv("HOME");
+	if (home == NULL)
 		return -1;
-	return printf("Home:    %s\n", user_info.home);
+	return printf("Home:    %s\n", home);
 }
 
 int print_desktop()
@@ -202,4 +203,3 @@ int main(int argc, char *argv[])
 	return argp_parse(&argp, argc, argv, 0, 0, 0);
 
 }
-
