@@ -1,4 +1,4 @@
 [submodule "cimplylib"]
 	path = cimplylib
-	url = git@github.com:caverym/cimplylib.git
+	url = http://github.com/caverym/cimplylib.git
 
