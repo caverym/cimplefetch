@@ -3,8 +3,7 @@ CC=gcc
 CFLAGS=-Wall -g
 
 build:
-	make -C cimplylib/
-	gcc $(CFLAGS) -o $(PROG) $(PROG).c cimplylib/cimply.a
+	gcc $(CFLAGS) -o $(PROG) $(PROG).c -lcimply
 
 
 install:
@@ -17,4 +16,4 @@ uninstall:
 
 clean:
 	rm -f $(PROG)
-	make -C cimplylib/ clean
+

@@ -4,13 +4,13 @@
 #include <sys/sysinfo.h>
 #include <string.h>
 #include <argp.h>
-#include "cimplylib/cimply.h"
+#include <libcimply.h>
 
 struct utsname uname_info;
 struct cimply user_info;
 struct sysinfo system_info;
 
-const char *argp_program_version = "Cimplefetch version 0.2";
+const char *argp_program_version = "Cimplefetch version 0.3";
 
 // uname
 
@@ -24,7 +24,7 @@ int print_uptime(int secondes)
 	return printf("Uptime:  %d H, %d M\n", heures, minutes);
 }
 
-int print_full_uptimme(int secondes) {
+int print_full_uptime(int secondes) {
 	int heures, minutes, sec;
 
 	heures = (secondes / 3600);
@@ -114,7 +114,7 @@ int print_all()
 	print_os();
 	print_kernel();
 	print_arch();
-	print_full_uptimme(system_info.uptime);
+	print_full_uptime(system_info.uptime);
 
 	print_shell();
 	print_desktop();
@@ -150,7 +150,7 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 			print_shell();
 			break;
 		case 'T':
-			print_full_uptimme(system_info.uptime);
+			print_full_uptime(system_info.uptime);
 			break;
 		case 't':
 			print_uptime(system_info.uptime);
