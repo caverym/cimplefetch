@@ -7,9 +7,8 @@ A simple program to fetch system information written in C.
 ## Cloning:
 clone recursively
 ```
-git clone --recursive https://github.com/caverym/cimplefetch.git
+git clone https://github.com/caverym/cimplefetch.git
 ```
-_if you didn't clone recursively, run `sh ./setup.sh`
 
 ## Usage:
 `cimplefetch`
@@ -33,7 +32,6 @@ _if you didn't clone recursively, run `sh ./setup.sh`
 
 ## Building:
 ```
-sh ./setup
 make
 ```
 
