@@ -20,7 +20,7 @@ struct sysinfo system_info;
 #endif
 
 #define VERSION "0.4"
-const char *argp_program_version = "Cimplefetch "VERSION" by Avery\nusing libcimply " CIMPLY_VERSION;
+const char *argp_program_version = "Cimplefetch "VERSION" by Avery\nusing libcimply " CIMPLY_VERSION; // this code expects libcimply 0.5
 
 // uname
 
@@ -65,7 +65,7 @@ int print_arch()
 
 int print_userinfo()
 {
-	return printf("         %s@%s\n", user_info.name, uname_info.nodename);
+	return printf("         %s@%s\n", user_info.name, user_info.hostname);
 }
 
 int print_user()
@@ -77,7 +77,6 @@ int print_user()
 
 int print_shell()
 {
-	// return printf("Shell:   %s\n", getenv("SHELL"));
 	char *shell = getenv("SHELL");
 	if (shell == NULL)
 		return -1;
@@ -115,11 +114,11 @@ int print_desktop()
 	return printf("Desktop: %s\n", desktop);
 }
 
-int print_pwd()
+int print_cwd()
 {
 	if (user_info.cwd == NULL)
 		return -1;
-	return printf("PWD:     %s\n", user_info.cwd);
+	return printf("CWD:     %s\n", user_info.cwd);
 }
 
 #ifdef __APPLE__
@@ -152,7 +151,7 @@ int print_all()
 	print_shell();
 	print_desktop();
 	print_home();
-	print_pwd();
+	print_cwd();
 
 	return 0;
 }

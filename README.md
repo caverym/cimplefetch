@@ -4,12 +4,6 @@ A simple program to fetch system information written in C.
 
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/caverym/cimplefetch.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/caverym/cimplefetch/context:cpp)
 
-## Cloning:
-clone recursively
-```
-git clone https://github.com/caverym/cimplefetch.git
-```
-
 ## Usage:
 `cimplefetch`
 
@@ -31,6 +25,7 @@ git clone https://github.com/caverym/cimplefetch.git
 ```
 
 ## Building:
+you must have [libcimply](https://github.com/caverym/libcimply) installed.
 ```
 make
 ```
