@@ -1,16 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/utsname.h>
-#include <sys/sysinfo.h>
 #include <string.h>
 #include <argp.h>
+
 #include <libcimply.h>
-
-struct utsname uname_info;
 struct cimply user_info;
-struct sysinfo system_info;
 
-const char *argp_program_version = "Cimplefetch version 0.3";
+#include <sys/utsname.h>
+struct utsname uname_info;
+
+// To compile on macOS, run with this:
+// `gcc -Wall -g -o cimplefetch cimplefetch.c -largp -lcimply`
+// you must have glib, argp-standalone and libcimply installed
+#ifndef __APPLE__
+#include <sys/sysinfo.h>
+struct sysinfo system_info;
+#else
+#include <sys/sysctl.h>
+#endif
+
+#define VERSION "0.4"
+const char *argp_program_version = "Cimplefetch "VERSION" by Avery\nusing libcimply " CIMPLY_VERSION;
 
 // uname
 
@@ -31,7 +41,8 @@ int print_full_uptime(int secondes) {
 	minutes = (secondes - (3600 * heures)) / 60;
 	sec = (secondes - (3600 * heures) - (minutes * 60));
 
-	return printf("Uptime:  %d hours, %d minutes, %d seconds (%d total seconds)\n", heures, minutes, sec, secondes);
+	return printf("Uptime:  %d hour(s), %d minutes, %d seconds (%d total seconds)\n",
+	heures, minutes, sec, secondes);
 }
 
 int print_kernel()
@@ -85,8 +96,13 @@ int print_desktop()
 {
 	char *desktop = getenv("XDG_SESSION_DESKTOP");
 
-	if (desktop == NULL)
+	if (desktop == NULL) {
+		#ifdef __APPLE__
+		desktop = "Finder";
+		#else
 		return -1;
+		#endif
+	}
 
 	if (strcmp(desktop, "gnome") == 0)
 		desktop = "GNOME";
@@ -101,11 +117,25 @@ int print_desktop()
 
 int print_pwd()
 {
-	if (user_info.pwd == NULL)
+	if (user_info.cwd == NULL)
 		return -1;
-	return printf("PWD:     %s\n", user_info.pwd);
+	return printf("PWD:     %s\n", user_info.cwd);
 }
 
+#ifdef __APPLE__
+/* length 0 for short, 1 for long */
+int mac_print_time(int length)
+{
+	struct timeval mactime;
+	switch (length) {
+		case 0:
+			return print_uptime(mactime.tv_sec);
+		case 1:
+			return print_full_uptime(mactime.tv_sec);
+	}
+	return 0;
+}
+#endif
 
 int print_all()
 {
@@ -114,8 +144,11 @@ int print_all()
 	print_os();
 	print_kernel();
 	print_arch();
+	#ifndef __APPLE__
 	print_full_uptime(system_info.uptime);
-
+	#else
+	mac_print_time(1);
+	#endif
 	print_shell();
 	print_desktop();
 	print_home();
@@ -149,12 +182,21 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 		case 's':
 			print_shell();
 			break;
+		#ifndef __APPLE
 		case 'T':
 			print_full_uptime(system_info.uptime);
 			break;
 		case 't':
 			print_uptime(system_info.uptime);
 			break;
+		#else
+		case 'T':
+			mac_print_time(1);
+			break;
+		case 't':
+			mac_print_time(0);
+			break;
+		#endif	
 		case 'u':
 			print_user();
 			break;
@@ -168,7 +210,11 @@ int print_default()
 	print_userinfo();
 	print_os();
 	print_kernel();
+	#ifndef __APPLE
 	print_uptime(system_info.uptime);
+	#else
+	mac_print_time(0);
+	#endif
 	print_shell();
 
 	return 0;
@@ -177,29 +223,31 @@ int print_default()
 int main(int argc, char *argv[])
 {
 	uname(&uname_info);
-	sysinfo(&system_info);
 	cimple_init(&user_info);
+
+	#ifndef __APPLE__
+	sysinfo(&system_info);
+	#endif
 
 	if (argc == 1)
 		return print_default();
 
 	struct argp_option options[] =
 		{
-			{"all", 'a', 0, 0, "Print all"},
-			{"arch", 'A', 0, 0, "View system architecture"},
-			{"desktop", 'd', 0, 0, "View current user desktop environment"},
-			{"home", 'H', 0, 0, "View current user home"},
-			{"kernel", 'k', 0 ,0, "View kernel info"},
-			{"os", 'o', 0, 0, "View OS info"},
-			{"shell", 's', 0, 0, "View current user shell"},
-			{"full-uptime", 'T', 0, 0, "View full system uptime"},
-			{"uptime", 't', 0, 0, "View system uptime"},
-			{"user", 'u', 0, 0, "View current user info"},
-			{ 0 }
+		{"all", 'a', 0, 0, "Print all"},
+		{"arch", 'A', 0, 0, "View system architecture"},
+		{"desktop", 'd', 0, 0, "View current user desktop environment"},
+		{"home", 'H', 0, 0, "View current user home"},
+		{"kernel", 'k', 0 ,0, "View kernel info"},
+		{"os", 'o', 0, 0, "View OS info"},
+		{"shell", 's', 0, 0, "View current user shell"},
+		{"full-uptime", 'T', 0, 0, "View full system uptime"},
+		{"uptime", 't', 0, 0, "View system uptime"},
+		{"user", 'u', 0, 0, "View current user info"},
+		{ 0 }
 		};
 
 	struct argp argp = { options, parse_opt};
 
 	return argp_parse(&argp, argc, argv, 0, 0, 0);
-
 }
