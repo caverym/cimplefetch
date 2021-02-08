@@ -42,8 +42,9 @@ int print_full_uptime(int secondes) {
 	minutes = (secondes - (3600 * heures)) / 60;
 	sec = (secondes - (3600 * heures) - (minutes * 60));
 
-	return printf("Uptime:  %d hour(s), %d minutes, %d seconds (%d total seconds)\n",
-	heures, minutes, sec, secondes);
+	return printf("Uptime:  %d hour(s), %d minutes, %d seconds" 
+			" (%d total seconds)\n",
+			heures, minutes, sec, secondes);
 }
 
 int print_kernel()
@@ -63,6 +64,11 @@ int print_arch()
 
 
 // cimple
+
+int print_host()
+{
+	return printf("Host:    %s\n", user_info.hostname);
+}
 
 int print_userinfo()
 {
@@ -95,17 +101,18 @@ int find_stuff(int way, char string[24], char item)
 
 int print_shell()
 {
-    int first, last = 24;
+    int begining;
+    int end;
     char shell[24];
     strcpy(shell, getenv("SHELL"));
     if (shell[0] == '\0')
         return -1;
 
-    first = find_stuff(0, shell, '/');
-    last = find_stuff(1, shell, '\0');
+    begining = find_stuff(0, shell, '/');
+    end = find_stuff(1, shell, '\0');
 
     printf("Shell:   ");
-    for (int i = first; i <= last; i++) {
+    for (int i = begining; i <= end; i++) {
         printf("%c", shell[i]);
     }
 
@@ -186,6 +193,7 @@ int print_all()
 	print_user();
 	print_os();
 	print_kernel();
+	print_host();
 	print_arch();
 	#ifndef __APPLE__
 	print_full_uptime(system_info.uptime);
@@ -219,6 +227,9 @@ static int parse_opt(int key, char *arg, struct argp_state *state)
 			break;
 		case 'k':
 			print_kernel();
+			break;
+		case 'n':
+			print_host();
 			break;
 		case 'o':
 			print_os();
@@ -283,9 +294,10 @@ int main(int argc, char *argv[])
 		{
 		{"all", 'A', 0, 0, "Print all"},
 		{"arch", 'a', 0, 0, "View system architecture"},
-		{"desktop", 'd', 0, 0, "View current user desktop environment"},
+		{"desktop", 'd', 0, 0, "View current desktop environment"},
 		{"home", 'H', 0, 0, "View current user home"},
 		{"kernel", 'k', 0 ,0, "View kernel info"},
+		{"host", 'n', 0, 0, "View system hostname"},
 		{"os", 'o', 0, 0, "View OS info"},
 		{"shell", 's', 0, 0, "View current user shell"},
 		{"session", 'S', 0, 0, "View XDG Session type"},
@@ -299,3 +311,4 @@ int main(int argc, char *argv[])
 
 	return argp_parse(&argp, argc, argv, 0, 0, 0);
 }
+
