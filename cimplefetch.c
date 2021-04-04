@@ -104,9 +104,12 @@ int print_shell()
     int begining;
     int end;
     char shell[24];
-    strcpy(shell, getenv("SHELL"));
-    if (shell[0] == '\0')
-        return -1;
+	char *shell_string = getenv("SHELL");
+
+	if (!shell_string)
+		return -1;
+
+    strcpy(shell, shell_string);
 
     begining = find_stuff(0, shell, '/');
     end = find_stuff(1, shell, '\0');
@@ -159,10 +162,13 @@ int print_cwd()
 int print_session()
 {
 	char session[10];
+	char *session_string = getenv("XDG_SESSION_TYPE");
+
+	if (!session_string)
+		return -1;
+	
 	strcpy(session, getenv("XDG_SESSION_TYPE"));
 
-	if (session[0] == '\0')
-		return -1;
 	if (session[1] == '1') {
 		strcpy(session, "X11");
 	} else {
